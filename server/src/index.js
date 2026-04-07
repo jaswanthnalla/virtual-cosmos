@@ -10,7 +10,10 @@ const PORT = process.env.PORT || 3001;
 const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
 
 const app = express();
-app.use(cors({ origin: CLIENT_URL }));
+app.use(cors({
+  origin: CLIENT_URL === '*' ? true : CLIENT_URL.split(',').map(u => u.trim()),
+  credentials: true,
+}));
 app.use(express.json());
 
 import User from './models/User.js';
@@ -62,8 +65,9 @@ const httpServer = createServer(app);
 
 const io = new Server(httpServer, {
   cors: {
-    origin: CLIENT_URL,
+    origin: CLIENT_URL === '*' ? true : CLIENT_URL.split(',').map(u => u.trim()),
     methods: ['GET', 'POST'],
+    credentials: true,
   },
 });
 
