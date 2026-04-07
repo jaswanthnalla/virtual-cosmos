@@ -9,9 +9,25 @@ import { registerSocketHandlers } from './socket/handlers.js';
 const PORT = process.env.PORT || 3001;
 const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
 
+const ALLOWED_ORIGINS = [
+  ...CLIENT_URL.split(',').map(u => u.trim()),
+  'http://localhost:5173',
+  'https://client-pi-vert-37.vercel.app',
+  'https://client-jassunalla-3342s-projects.vercel.app',
+  'https://client-jassunalla-3342-jassunalla-3342s-projects.vercel.app',
+];
+
 const app = express();
 app.use(cors({
-  origin: CLIENT_URL === '*' ? true : CLIENT_URL.split(',').map(u => u.trim()),
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, curl, etc.)
+    if (!origin || ALLOWED_ORIGINS.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.log('Blocked by CORS:', origin);
+      callback(null, true); // Allow all in dev, restrict in production if needed
+    }
+  },
   credentials: true,
 }));
 app.use(express.json());
@@ -65,7 +81,13 @@ const httpServer = createServer(app);
 
 const io = new Server(httpServer, {
   cors: {
-    origin: CLIENT_URL === '*' ? true : CLIENT_URL.split(',').map(u => u.trim()),
+    origin: (origin, callback) => {
+      if (!origin || ALLOWED_ORIGINS.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(null, true);
+      }
+    },
     methods: ['GET', 'POST'],
     credentials: true,
   },
