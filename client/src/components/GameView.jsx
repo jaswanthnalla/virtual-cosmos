@@ -89,6 +89,14 @@ export default function GameView({ username }) {
         voicePeerCount={activeVoicePeers.size}
       />
 
+      {/* Position overlay */}
+      <div className="fixed top-14 left-3 z-20 bg-white/90 backdrop-blur-sm border border-gray-200 rounded-xl px-3 py-2 shadow-sm">
+        <p className="text-xs font-semibold text-gray-800">{currentUser.username}</p>
+        <p className="text-[11px] text-gray-500 font-mono">
+          x: {Math.round(currentUser.x)}, y: {Math.round(currentUser.y)}
+        </p>
+      </div>
+
       <ErrorBoundary>
         <Canvas
           currentUser={currentUser}

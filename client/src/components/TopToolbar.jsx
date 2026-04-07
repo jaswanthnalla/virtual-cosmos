@@ -76,20 +76,6 @@ export default function TopToolbar({
           )}
         </button>
 
-        {/* Call status */}
-        <div
-          className={`h-8 px-4 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors ${
-            voicePeerCount > 0
-              ? 'bg-green-600 text-white'
-              : 'bg-gray-800 text-white hover:bg-gray-700 cursor-default'
-          }`}
-        >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <polygon points="23 7 16 12 23 17 23 7" />
-            <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
-          </svg>
-          {voicePeerCount > 0 ? `In Call (${voicePeerCount})` : 'Call'}
-        </div>
       </div>
 
       {/* Right: Fullscreen */}
